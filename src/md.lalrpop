@@ -1,0 +1,54 @@
+grammar;
+
+pub MarkDown: String = {
+    <h1:H1><t:Text> => {
+        let mut temp = String::from("<h1>");
+        temp.push_str(t);
+        temp.push_str("</h1>");
+
+        return temp;
+    },
+    <h2:H2><t:Text> => {
+        let mut temp = String::from("<h2>");
+        temp.push_str(t);
+        temp.push_str("</h2>");
+
+        return temp;
+    },
+    <h3:H3><t:Text> => {
+        let mut temp = String::from("<h3>");
+        temp.push_str(t);
+        temp.push_str("</h3>");
+
+        return temp;
+    },
+    <h4:H4><t:Text> => {
+        let mut temp = String::from("<h4>");
+        temp.push_str(t);
+        temp.push_str("</h4>");
+
+        return temp;
+    },
+    <h5:H5><t:Text> => {
+        let mut temp = String::from("<h5>");
+        temp.push_str(t);
+        temp.push_str("</h5>");
+
+        return temp;
+    },
+    <h6:H6><t:Text> => {
+        let mut temp = String::from("<h6>");
+        temp.push_str(t);
+        temp.push_str("</h6>");
+
+        return temp;
+    }
+};
+
+H1: &'input str = <s:r"# "> => s;
+H2: &'input str = <s:r"#{2} "> => s;
+H3: &'input str = <s:r"#{3} "> => s;
+H4: &'input str = <s:r"#{4} "> => s;
+H5: &'input str = <s:r"#{5} "> => s;
+H6: &'input str = <s:r"#{6} "> => s;
+Text: &'input str = <s:r"[\w ]+"> => s;
