@@ -59,50 +59,9 @@ fn parse_markdown_file(_filename: &str) {
 
     for line in reader.lines() {
         let line_contents = line.unwrap();
-        let mut first_char: Vec<char> = line_contents.chars().take(1).collect();
-        let mut output_line = String::new();
+        let output_line = md::MarkDownParser::new().parse(&line_contents).unwrap();
 
-        match first_char.pop() {
-            // First character is #.
-            Some('#') => {
-                if _ptag {
-                    _ptag = false;
-                    output_line.push_str("</p>\n");
-                }
-
-                if _htag {
-                    _htag = false;
-                    output_line.push_str("</h1>\n");
-                }
-
-                _htag = true;
-                output_line.push_str("<h1>");
-                output_line.push_str(&line_contents[2..])
-            },
-            // First character is not #.
-            _ => {
-                if !_ptag {
-                    _ptag = true;
-                    output_line.push_str("<p>");
-                }
-
-                output_line.push_str(&line_contents);
-            }
-        }
-
-        if _ptag {
-            _ptag = false;
-            output_line.push_str("</p>\n");
-        }
-
-        if _htag {
-            _htag = false;
-            output_line.push_str("</h1>\n");
-        }
-
-        if output_line != "<p></p>\n" {
-            tokens.push(output_line);
-        }
+        tokens.push(output_line);
     }
 
     let mut output_filename = String::from(&_filename[.._filename.len()-3]);
@@ -112,6 +71,7 @@ fn parse_markdown_file(_filename: &str) {
 
     for line in &tokens {
         outfile.write(line.as_bytes()).expect("[ ERROR ] Could not write output file!");
+        outfile.write("\n".as_bytes()).expect("[ ERROR ] Could not write output file!");
     }
 
     println!("[ INFO ] Parsing Complete!")
