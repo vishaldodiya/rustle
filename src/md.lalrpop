@@ -42,6 +42,48 @@ pub MarkDown: String = {
         temp.push_str("</h6>");
 
         return temp;
+    },
+    <t:Text> => {
+        let mut temp = String::from("<p>");
+        temp.push_str(t);
+        temp.push_str("</p>");
+
+        return temp;
+    },
+    <t1:Text?> <s:Strong> <t2:Text?> => {
+        let mut temp = String::from("");
+
+        match t1 {
+            Some(t) => {
+                temp.push_str("<p>");
+                temp.push_str(t);
+            },
+            None => {
+                match t2 {
+                    Some(t) => temp.push_str("<p>"),
+                    None => temp.push_str("")
+                }
+            }
+        }
+
+        temp.push_str("<strong>");
+        temp.push_str(s);
+        temp.push_str("</strong>");
+
+        match t2 {
+            Some(t) => {
+                temp.push_str(t);
+                temp.push_str("</p>");
+            }
+            None => {
+                match t1 {
+                    Some(t) => temp.push_str("</p>"),
+                    None => temp.push_str("")
+                }
+            }
+        }
+
+        return temp;
     }
 };
 
@@ -52,3 +94,4 @@ H4: &'input str = <s:r"#{4} "> => s;
 H5: &'input str = <s:r"#{5} "> => s;
 H6: &'input str = <s:r"#{6} "> => s;
 Text: &'input str = <s:r"[\w ]+"> => s;
+Strong: &'input str = <s:r"\*{2}(.*)\*{2}"> => &s[2..s.len()-2];

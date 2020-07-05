@@ -6,15 +6,6 @@ use std::io::Write;
 
 lalrpop_mod!(pub md);
 
-#[test]
-fn md() {
-    // Test H1 Tag.
-    assert_eq!(md::MarkDownParser::new().parse("# Hello").unwrap(), "<h1>Hello</h1>");
-
-    // Test H2 Tag.
-    assert_eq!(md::MarkDownParser::new().parse("## Hello").unwrap(), "<h2>Hello</h2>");
-}
-
 fn get_title() -> String {
     let mut the_title = String::from(env!("CARGO_PKG_NAME"));
     the_title.push_str(" (v");
@@ -87,4 +78,46 @@ fn main() {
             usage();
         }
     }
+}
+
+#[test]
+fn test_headings() {
+    // Test H1 Tag.
+    assert_eq!(md::MarkDownParser::new().parse("# Hello9").unwrap(), "<h1>Hello9</h1>");
+
+    // Test H2 Tag.
+    assert_eq!(md::MarkDownParser::new().parse("## Hello").unwrap(), "<h2>Hello</h2>");
+
+    // Test H3 Tag.
+    assert_eq!(md::MarkDownParser::new().parse("### Hello").unwrap(), "<h3>Hello</h3>");
+
+    // Test H4 Tag.
+    assert_eq!(md::MarkDownParser::new().parse("#### Hello").unwrap(), "<h4>Hello</h4>");
+
+    // Test H5 Tag.
+    assert_eq!(md::MarkDownParser::new().parse("##### Hello").unwrap(), "<h5>Hello</h5>");
+
+    // Test H6 Tag.
+    assert_eq!(md::MarkDownParser::new().parse("###### Hello").unwrap(), "<h6>Hello</h6>");
+}
+
+#[test]
+fn test_paragraphs() {
+    // Test P tags.
+    assert_eq!(md::MarkDownParser::new().parse("Hello World").unwrap(), "<p>Hello World</p>");
+}
+
+#[test]
+fn test_bold() {
+    // Test only Strong.
+    assert_eq!(md::MarkDownParser::new().parse("**Hello World**").unwrap(), "<strong>Hello World</strong>");
+
+    // Test Strong with initial text.
+    assert_eq!(md::MarkDownParser::new().parse("Hey There **Hello World**").unwrap(), "<p>Hey There <strong>Hello World</strong></p>");
+
+    // Test Strong with text at end.
+    assert_eq!(md::MarkDownParser::new().parse("**Hello World** Howdy").unwrap(), "<p><strong>Hello World</strong> Howdy</p>");
+
+    // Test Strong with text on both sides.
+    assert_eq!(md::MarkDownParser::new().parse("Hey There **Hello World** Howdy").unwrap(), "<p>Hey There <strong>Hello World</strong> Howdy</p>");
 }
