@@ -3,6 +3,12 @@
 ### A MarkDown compiler made using Rust.
 The Future goal is to create a static page generator with markdown text support for adding content in the page.
 
+## Example
+
+```
+$ cargo run <filename>.md
+```
+
 ## Built With
 * [Rust](https://www.rust-lang.org/)
 * [LALRPOP](https://github.com/lalrpop/lalrpop) - Rust based LR(1) Parser Generator.
