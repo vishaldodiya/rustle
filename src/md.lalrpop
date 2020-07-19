@@ -1,6 +1,7 @@
 grammar;
 
 pub MarkDown: String = {
+    // Heading 1.
     <h1:H1><t:Text> => {
         let mut temp = String::from("<h1>");
         temp.push_str(t);
@@ -8,6 +9,7 @@ pub MarkDown: String = {
 
         return temp;
     },
+    // Heading 2.
     <h2:H2><t:Text> => {
         let mut temp = String::from("<h2>");
         temp.push_str(t);
@@ -15,6 +17,7 @@ pub MarkDown: String = {
 
         return temp;
     },
+    // Heading 3.
     <h3:H3><t:Text> => {
         let mut temp = String::from("<h3>");
         temp.push_str(t);
@@ -22,6 +25,7 @@ pub MarkDown: String = {
 
         return temp;
     },
+    // Heading 4.
     <h4:H4><t:Text> => {
         let mut temp = String::from("<h4>");
         temp.push_str(t);
@@ -29,6 +33,7 @@ pub MarkDown: String = {
 
         return temp;
     },
+    // Heading 5.
     <h5:H5><t:Text> => {
         let mut temp = String::from("<h5>");
         temp.push_str(t);
@@ -36,6 +41,7 @@ pub MarkDown: String = {
 
         return temp;
     },
+    // Heading 6.
     <h6:H6><t:Text> => {
         let mut temp = String::from("<h6>");
         temp.push_str(t);
@@ -43,6 +49,7 @@ pub MarkDown: String = {
 
         return temp;
     },
+    // Text.
     <t:Text> => {
         let mut temp = String::from("<p>");
         temp.push_str(t);
@@ -50,7 +57,8 @@ pub MarkDown: String = {
 
         return temp;
     },
-    <t1:Text?> <s:Strong> <t2:Text?> => {
+    // Bold.
+    <t1:Text?> "**" <s:Text> "**" <t2:Text?> => {
         let mut temp = String::from("");
 
         match t1 {
@@ -85,7 +93,8 @@ pub MarkDown: String = {
 
         return temp;
     },
-    <t1:Text?> <i:Italic> <t2:Text?> => {
+    // Italic.
+    <t1:Text?> "*" <i:Text> "*" <t2:Text?> => {
         let mut temp = String::from("");
 
         match t1 {
@@ -119,6 +128,42 @@ pub MarkDown: String = {
         }
 
         return temp;
+    },
+    // Strong - Italic.
+    <t1:Text?> "***" <si:Text> "***" <t2:Text?> => {
+        let mut temp = String::from("");
+
+        match t1 {
+            Some(t) => {
+                temp.push_str("<p>");
+                temp.push_str(t);
+            },
+            None => {
+                match t2 {
+                    Some(t) => temp.push_str("<p>"),
+                    None => temp.push_str("")
+                }
+            }
+        }
+
+        temp.push_str("<strong><em>");
+        temp.push_str(si);
+        temp.push_str("</em></strong>");
+
+        match t2 {
+            Some(t) => {
+                temp.push_str(t);
+                temp.push_str("</p>");
+            }
+            None => {
+                match t1 {
+                    Some(t) => temp.push_str("</p>"),
+                    None => temp.push_str("")
+                }
+            }
+        }
+
+        return temp;
     }
 };
 
@@ -129,5 +174,3 @@ H4: &'input str = <s:r"#{4} "> => s;
 H5: &'input str = <s:r"#{5} "> => s;
 H6: &'input str = <s:r"#{6} "> => s;
 Text: &'input str = <s:r"[\w ]+"> => s;
-Strong: &'input str = <s:r"\*{2}[\w ]+\*{2}"> => &s[2..s.len()-2];
-Italic: &'input str = <s:r"\*{1}[\w ]+\*{1}"> => &s[1..s.len()-1];

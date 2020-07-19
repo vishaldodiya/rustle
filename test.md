@@ -13,3 +13,7 @@ This is **bold text** surrounded
 This is *Italic Text* Ends Here
 *Italic Text* End Here
 This is *Italic Text*
+***Italic String***
+This is ***Italic Strong*** Ends here
+***Italic Strong*** Ends here
+This is ***Italic Strong***
