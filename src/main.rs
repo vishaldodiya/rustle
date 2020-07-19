@@ -48,12 +48,25 @@ fn parse_markdown_file(_filename: &str) {
     // Read file line by line.
     let reader = BufReader::new(file);
 
+    tokens.push(String::from("<!DOCTYPE html>"));
+    tokens.push(String::from("<html lang='en'>"));
+    tokens.push(String::from("<head>"));
+    tokens.push(String::from("<meta charset='UTF-8'>"));
+    tokens.push(String::from("<meta name='viewport' content='width=device-width, initial-scale=1.0'>"));
+    tokens.push(String::from("<title>Document</title>"));
+    tokens.push(String::from("<link href='https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css' rel='stylesheet'>"));
+    tokens.push(String::from("</head>"));
+    tokens.push(String::from("<body>"));
+
     for line in reader.lines() {
         let line_contents = line.unwrap();
         let output_line = md::MarkDownParser::new().parse(&line_contents).unwrap();
 
         tokens.push(output_line);
     }
+
+    tokens.push(String::from("</body>"));
+    tokens.push(String::from("<html>"));
 
     let mut output_filename = String::from(&_filename[.._filename.len()-3]);
     output_filename.push_str(".html");
